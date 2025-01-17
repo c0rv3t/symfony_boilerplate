@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Tâche{% endblock %}
+
+{% block body %}
+<h1>Détails de la Tâche</h1>
+
+<p><strong>ID :</strong> {{ task.id }}</p>
+<p><strong>Nom :</strong> {{ task.name }}</p>
+<p><strong>Description :</strong> {{ task.description }}</p>
+<p><strong>Auteur :</strong> {{ task.author.email }}</p>
+<p><strong>Créée le :</strong> {{ task.createdAt|date('d/m/Y H:i') }}</p>
+<p><strong>Dernière modification :</strong> {{ task.updatedAt|date('d/m/Y H:i') }}</p>
+
+<a href="{{ path('task_index') }}">Retour à la liste des tâches</a>
+<a href="{{ path('task_edit', { id: task.id }) }}">Modifier</a>
+<form method="post" action="{{ path('task_delete', { id: task.id }) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+    <button type="submit">Supprimer</button>
+</form>
+{% endblock %}

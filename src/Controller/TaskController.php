@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
+use App\Form\TaskType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,64 +12,68 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
-    #[Route('/tasks', name: 'task_index', methods: ['GET'])]
-    public function index(): Response
+    #[Route('/tasks', name: 'task_index')]
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        $tasks = [];
-
+        $tasks = $entityManager->getRepository(Task::class)->findAll();
+    
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
         ]);
     }
 
-    #[Route('/tasks/new', name: 'task_create', methods: ['GET', 'POST'])]
-    public function create(Request $request): Response
+    #[Route('/task/create', name: 'task_create')]
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if ($request->isMethod('POST')) {
-            $taskData = $request->request->all();
+        $task = new Task();
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($task);
+            $entityManager->flush();
+
             return $this->redirectToRoute('task_index');
         }
 
-        return $this->render('task/create.html.twig');
+        return $this->render('task/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/tasks/{id}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request): Response
+    #[Route('/task/edit/{id}', name: 'task_edit')]
+    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager): Response
     {
-        $task = null;
-
-        if (!$task) {
-            throw $this->createNotFoundException("La tâche avec l'id $id n'existe pas.");
-        }
-
-        if ($request->isMethod('POST')) {
-            $updatedData = $request->request->all();
-
+        $form = $this->createForm(TaskType::class, $task);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
             return $this->redirectToRoute('task_index');
         }
-
+    
         return $this->render('task/edit.html.twig', [
+            'form' => $form->createView(),
             'task' => $task,
         ]);
     }
 
-    #[Route('/tasks/{id}', name: 'task_view', methods: ['GET'])]
-    public function view(int $id): Response
+    #[Route('/task/view/{id}', name: 'task_view')]
+    public function view(Task $task): Response
     {
-        $task = null;
-
-        if (!$task) {
-            throw $this->createNotFoundException("La tâche avec l'id $id n'existe pas.");
-        }
-
         return $this->render('task/view.html.twig', [
             'task' => $task,
         ]);
-    }
+    }    
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['POST'])]
-    public function delete(int $id): Response
+    #[Route('/task/delete/{id}', name: 'task_delete', methods: ['POST', 'GET'])]
+    public function delete(Task $task, EntityManagerInterface $entityManager): Response
     {
+        $entityManager->remove($task);
+        $entityManager->flush();
+    
         return $this->redirectToRoute('task_index');
-    }
+    }    
 }

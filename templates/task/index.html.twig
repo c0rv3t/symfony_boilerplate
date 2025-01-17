@@ -1,16 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TaskController!{% endblock %}
+{% block title %}Liste des Tâches{% endblock %}
 
 {% block body %}
+    <h1 class="text-center my-4">Liste des Tâches</h1>
 
-<div class="example-wrapper">
-    <h1>Hello Arab! ✅</h1>
+    <table class="text-center table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Créée le</th>
+                <th>Dernière modification</th>
+                <th>Auteur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.createdAt|date('d/m/Y H:i:s') }}</td>
+                    <td>{{ task.updatedAt|date('d/m/Y H:i:s') }}</td>
+                    <td>{{ task.author.email }}</td>
+                    <td>
+                        <a href="{{ path('task_view', { id: task.id }) }}">Voir</a> |
+                        <a href="{{ path('task_edit', { id: task.id }) }}">Modifier</a> |
+                        <a href="{{ path('task_delete', { id: task.id }) }}" onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Aucune tâche trouvée.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/MAMP/htdocs/All/symfony_boilerplate/src/Controller/TaskController.php</code></li>
-        <li>Your template at <code>C:/MAMP/htdocs/All/symfony_boilerplate/templates/task/index.html.twig</code></li>
-    </ul>
-</div>
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('task_create') }}" class="text-center">Créer une nouvelle tâche</a>
+    {% endif %}
 {% endblock %}
