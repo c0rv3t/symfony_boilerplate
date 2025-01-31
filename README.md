@@ -1,3 +1,5 @@
+## Projet de Thomas DUCRET
+
 # Symfony 7.1 Boilerplate 
 
 Attention : Il vous faut PHP 8.2 pour faire fonctionner ce projet si vous avez PHP 8.1 utiliser la branche symfony64 du repository.
