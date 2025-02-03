@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 1000px; width: 95%; font: 18px/1.5 }
+</style>
+
+<div class="example-wrapper text-center my-3">
+    <h1 class="text-primary">Hello there{% if app.user %} {{ app.user.firstname }}{% else %},<br> you are not logged in{% endif %}!</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="alert alert-info">
+            You are an admin.
+        </div>
+    {% elseif is_granted('ROLE_MANAGER') %}
+        <div class="alert alert-info">
+            You are a manager.
+        </div>
+    {% elseif is_granted('ROLE_USER') %}
+        <div class="alert alert-info">
+            You are a user.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

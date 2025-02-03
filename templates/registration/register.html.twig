@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4 bg-grey-1" style="width: 100%; max-width: 400px;" id="registration-form">
+        <h1 class="text-center mb-4">Register</h1>
+
+        {{ form_start(registrationForm) }}
+
+            <div class="mb-3">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                {% if registrationForm.email.vars.errors|length > 0 %}
+                    <div class="text-danger">{{ registrationForm.email.vars.errors[0].message }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(registrationForm.firstName) }}
+                {{ form_widget(registrationForm.firstName) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(registrationForm.lastName) }}
+                {{ form_widget(registrationForm.lastName) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(registrationForm.password) }}
+                {{ form_widget(registrationForm.password) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+
+        {{ form_end(registrationForm) }}
+
+        <div class="text-center mt-3">
+            <a href="/login">Already have an account? Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
