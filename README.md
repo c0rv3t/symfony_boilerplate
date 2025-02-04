@@ -1,5 +1,23 @@
 ## Projet de Thomas DUCRET
 
+Commandes utilisées:
+
+- composer require
+- composer require --dev doctrine/doctrine-fixtures-bundle
+- composer require doctrine/doctrine-fixtures-bundle
+- composer require fakerphp/faker --dev
+- composer require symfony/security-bundle
+- composer require symfonycasts/reset-password-bundle
+- composer require league/csv
+
+# Étape 3 : Gestion des produits
+
+6. Création d’une commande Symfony pour importer un fichier CSV contenant des produits. Le fichier CSV comportera un en-tête avec les colonnes suivantes : name, description, price. Les id seront générés automatiquement lors de l'importation.
+
+php bin/console app:import-products "C:\Users\Vous\Downloads\products.csv" <-- Commande pour importer des produits en bdd (Étape 3.6)
+
+
+
 # Symfony 7.1 Boilerplate 
 
 Attention : Il vous faut PHP 8.2 pour faire fonctionner ce projet si vous avez PHP 8.1 utiliser la branche symfony64 du repository.

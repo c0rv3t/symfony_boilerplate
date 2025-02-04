@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ is_editing ? 'Edit' : 'Add' }} a product{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4 bg-grey-1" style="width: 100%; max-width: 700px;">
+        <h1 class="text-center">{{ is_editing ? 'Edit' : 'Add' }} a product</h1>
+
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.price) }}
+            {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.price) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">{{ is_editing ? 'Edit' : 'Add' }} Product</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
