@@ -8,6 +8,34 @@
 </style>
 
 <div class="example-wrapper text-center my-3">
+    {% for flashMessage in app.session.flashBag.get('success') %}
+        <div class="alert alert-dismissible alert-success fade show" role="alert">
+            <strong>Success!</strong> {{ flashMessage }}
+            <button type="button" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashBag.get('info') %}
+        <div class="alert alert-dismissible alert-info fade show" role="alert">
+            <strong>Info!</strong> {{ flashMessage }}
+            <button type="button" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashBag.get('warning') %}
+        <div class="alert alert-dismissible alert-warning fade show" role="alert">
+            <strong>Warning!</strong> {{ flashMessage }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashBag.get('error') %}
+        <div class="alert alert-dismissible alert-danger fade show" role="alert">
+            <strong>Error!</strong> {{ flashMessage }}
+            <button type="button" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>
+    {% endfor %}
+
     <h1 class="text-primary">Hello there{% if app.user %} {{ app.user.firstname }}{% else %},<br> you are not logged in{% endif %}!</h1>
     {% if is_granted('ROLE_ADMIN') %}
         <div class="alert alert-info">

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Security\Voter\ProductVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,10 @@ class ProductController extends AbstractController
     #[Route('/products/create', name: 'product_create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted(ProductVoter::ADD, Product::class)) {
+            $this->addFlash('error', 'You do not have permission to create a product.');
+            return $this->redirectToRoute('product_index');
+        }
 
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -35,6 +39,8 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($product);
             $entityManager->flush();
+
+            $this->addFlash('success', 'The product was successfully added.');
 
             return $this->redirectToRoute('product_index');
         }
@@ -48,13 +54,18 @@ class ProductController extends AbstractController
     #[Route('/products/edit/{id}', name: 'product_edit')]
     public function edit(Product $product, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted(ProductVoter::EDIT, $product)) {
+            $this->addFlash('error', 'You do not have permission to edit a product.');
+            return $this->redirectToRoute('product_index');
+        }
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash('success', 'The product was successfully edited.');
 
             return $this->redirectToRoute('product_index');
         }
@@ -68,10 +79,15 @@ class ProductController extends AbstractController
     #[Route('/products/delete/{id}', name: 'product_delete')]
     public function delete(Product $product, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted(ProductVoter::DELETE, $product)) {
+            $this->addFlash('error', 'You do not have permission to delete a product.');
+            return $this->redirectToRoute('product_index');
+        }
 
         $entityManager->remove($product);
         $entityManager->flush();
+
+        $this->addFlash('success', 'The product was successfully deleted.');
 
         return $this->redirectToRoute('product_index');
     }

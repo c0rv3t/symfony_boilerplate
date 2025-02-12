@@ -4,10 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Security\Voter\UserVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -16,7 +17,10 @@ class UserController extends AbstractController
     #[Route('/admin/users', name: 'admin_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted(UserVoter::INDEX, User::class)) {
+            $this->addFlash('error', 'You do not have permission to access this page.');
+            return $this->redirectToRoute('home');
+        }
 
         $users = $entityManager->getRepository(User::class)->findAll();
 
@@ -28,7 +32,10 @@ class UserController extends AbstractController
     #[Route('/admin/users/create', name: 'admin_users_create')]
     public function create(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if (!$this->isGranted(UserVoter::ADD, User::class)) {
+            $this->addFlash('error', 'You do not have permission to create a user.');
+            return $this->redirectToRoute('admin_users');
+        }
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -56,6 +63,8 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            $this->addFlash('success', 'The user was successfully added.');
+
             return $this->redirectToRoute('admin_users');
         }
 
@@ -68,7 +77,10 @@ class UserController extends AbstractController
         #[Route('/admin/users/edit/{id}', name: 'admin_users_edit')]
     public function edit(User $user, Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $this->denyAccessUnlessGranted('edit_user', $user);
+        if (!$this->isGranted(UserVoter::EDIT, $user)) {
+            $this->addFlash('error', 'You do not have permission to edit a user.');
+            return $this->redirectToRoute('admin_users');
+        }
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -97,6 +109,8 @@ class UserController extends AbstractController
 
             $entityManager->flush();
 
+            $this->addFlash('success', 'The user was successfully edited.');
+
             return $this->redirectToRoute('admin_users');
         }
 
@@ -109,10 +123,15 @@ class UserController extends AbstractController
     #[Route('/admin/users/delete/{id}', name: 'admin_users_delete')]
     public function delete(User $user, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('delete_user', $user);
+        if (!$this->isGranted(UserVoter::DELETE, $user)) {
+            $this->addFlash('error', 'You do not have permission to delete a user.');
+            return $this->redirectToRoute('admin_users');
+        }
 
         $entityManager->remove($user);
         $entityManager->flush();
+
+        $this->addFlash('success', 'The user was successfully deleted.');
 
         return $this->redirectToRoute('admin_users');
     }

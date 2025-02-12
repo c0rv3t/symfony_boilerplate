@@ -16,6 +16,12 @@ Commandes utilisées:
 
 php bin/console app:import-products "C:\Users\Vous\Downloads\products.csv" <-- Commande pour importer des produits en bdd (Étape 3.6)
 
+# Étape 4 : Gestion des clients
+
+6. Ajout d’une commande pour ajouter des clients en ligne de commande. La commande demandera le nom, prénom email et le rôle.
+commande à utiliser:
+
+php bin/console app:add-client
 
 
 # Symfony 7.1 Boilerplate 

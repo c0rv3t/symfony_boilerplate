@@ -7,28 +7,29 @@
     <div class="card shadow p-4 bg-grey-1" style="width: 100%; max-width: 700px;">
         <h1 class="text-center">{{ is_editing ? 'Edit' : 'Add' }} a product</h1>
 
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
 
         <div class="mb-3">
             {{ form_label(form.name) }}
+            <a class="text-danger">{{ form_errors(form.name) }}</a>
             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.name) }}
         </div>
 
         <div class="mb-3">
             {{ form_label(form.description) }}
+            <a class="text-danger">{{ form_errors(form.description) }}</a>
             {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.description) }}
-        </div>
 
         <div class="mb-3">
             {{ form_label(form.price) }}
             {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.price) }}
+            <a class="text-danger">{{ form_errors(form.price) }}</a>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-4">{{ is_editing ? 'Edit' : 'Add' }} Product</button>
-
+        <div class="row justify-content-around">
+            <button type="submit" class="btn btn-primary mt-4 mx-1 col-5 col-md-4 col-lg-3">{{ is_editing ? 'Edit' : 'Add' }} Product</button>
+            <a href="/products" class="btn btn-danger mt-4 mx-1 col-5 col-md-4 col-lg-3">Cancel</a>
+        </div>
         {{ form_end(form) }}
     </div>
 </div>

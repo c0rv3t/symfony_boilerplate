@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ is_editing ? 'Edit client' : 'Add a client' }}{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4 bg-grey-1" style="width: 100%; max-width: 700px;">
+        <h1 class="text-center">{{ is_editing ? 'Edit client' : 'New client' }}</h1>
+
+        {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+            <div class="mb-3">
+                {{ form_label(form.firstName) }}
+                <a class="text-danger">{{ form_errors(form.firstName) }}</a>
+                {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.lastName) }}
+                <a class="text-danger">{{ form_errors(form.lastName) }}</a>
+                {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.email) }}
+                <a class="text-danger">{{ form_errors(form.email) }}</a>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.phoneNumber) }}
+                <a class="text-danger">{{ form_errors(form.phoneNumber) }}</a>
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.address) }}
+                <a class="text-danger">{{ form_errors(form.address) }}</a>
+                {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+            </div>
+
+            <div class="row justify-content-around">
+                <button type="submit" class="btn btn-primary mt-4 mx-1 col-5 col-md-4 col-lg-3">{{ is_editing ? 'Edit' : 'Add' }}</button>
+                <a href="/clients" class="btn btn-danger mt-4 mx-1 col-5 col-md-4 col-lg-3">Cancel</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
