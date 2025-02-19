@@ -23,6 +23,14 @@ commande à utiliser:
 
 php bin/console app:add-client
 
+# Étape 5: Tests
+
+Utilisez la commande suivante pour lancer les tests:
+
+php bin/phpunit --testdox
+ou
+php bin/phpunit
+
 
 # Symfony 7.1 Boilerplate 
 

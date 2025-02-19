@@ -70,7 +70,9 @@ class ImportProductsCommand extends Command
             $product->setName($record['name']);
             $product->setDescription($record['description']);
 
-            $price = str_replace(',', '.', $record['price']);
+            $price = $record['price'];
+            $price = str_replace(' ', '', $price);
+            $price = str_replace(',', '.', $price);
             $product->setPrice((float) $price);
             
             $this->entityManager->persist($product);

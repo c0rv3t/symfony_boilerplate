@@ -21,10 +21,10 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'attr' => ['autocomplete' => 'off']
             ])
-            ->add('firstName', TextType::class, [
+            ->add('firstname', TextType::class, [
                 'attr' => ['autocomplete' => 'off']
             ])
-            ->add('lastName', TextType::class, [
+            ->add('lastname', TextType::class, [
                 'attr' => ['autocomplete' => 'off']
             ])
             ->add('roles', ChoiceType::class, [
